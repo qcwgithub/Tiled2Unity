@@ -32,12 +32,30 @@ namespace Tiled2Unity
                 elements.Add(importMesh);
             }
 
+            foreach (var importNavigation in EnumerateImportNavigationElements())
+            {
+                elements.Add(importNavigation);
+            }
+
             foreach (var texture in EnumerateTextureElements(exportToUnityProjectPath))
             {
                 elements.Add(texture);
             }
 
             return elements;
+        }
+
+        private IEnumerable<XElement> EnumerateImportNavigationElements()
+        {
+            foreach (var tuple in EnumerateNavigationData())
+            {
+                var meshName = tuple.Item1;
+                List<byte> data = tuple.Item2;
+                string path = String.Format("{0}.bytes", meshName);
+                yield return new XElement("ImportNavigation",
+                                            new XAttribute("filename", path),
+                                            Convert.ToBase64String(data.ToArray()));
+            }
         }
 
         private IEnumerable<XElement> EnumerateImportMeshElements()

@@ -49,6 +49,64 @@ namespace Tiled2Unity
             }
         }
 
+        private IEnumerable<Tuple<string, List<byte>>> EnumerateNavigationData()
+        {
+            Logger.WriteLine("Enumerate map layers for navigation-build.");
+            foreach (var layer in this.tmxMap.EnumerateTileLayers())
+            {
+                if (layer.Visible != true)
+                    continue;
+
+                if (layer.Ignore == TmxLayer.IgnoreSettings.Visual)
+                    continue;
+
+                if (layer.Properties.GetPropertyValueAsString("type") != "Navigation")
+                    continue;
+
+                // Enumerate over the tiles in the direction given by the draw order of the map
+                var verticalRange = (this.tmxMap.DrawOrderVertical == 1) ? Enumerable.Range(0, layer.Height) : Enumerable.Range(0, layer.Height).Reverse();
+                var horizontalRange = (this.tmxMap.DrawOrderHorizontal == 1) ? Enumerable.Range(0, layer.Width) : Enumerable.Range(0, layer.Width).Reverse();
+
+                // ??这里会有多个吗
+                foreach (TmxMesh mesh in layer.Meshes)
+                {
+                    yield return Tuple.Create(mesh.UniqueMeshName, BuildNavigationDataForLayerMesh(layer, mesh, horizontalRange, verticalRange));
+                }
+            }
+            Logger.WriteLine("Finished enumeration.");
+
+            //Logger.WriteLine("Enumerate tile objects for mesh-build.");
+            //foreach (var mesh in this.tmxMap.GetUniqueListOfVisibleObjectTileMeshes())
+            //{
+            //    yield return Tuple.Create(mesh.UniqueMeshName, BuildWavefrontStringForTileObjectMesh(mesh));
+            //}
+            //Logger.WriteLine("Finished enumeration.");
+        }
+
+        private List<byte> BuildNavigationDataForLayerMesh(TmxLayer layer, TmxMesh mesh, IEnumerable<int> horizontalRange, IEnumerable<int> verticalRange)
+        {
+            Logger.WriteLine("Building mesh obj file for '{0}'", mesh.UniqueMeshName);
+
+            List<byte> re = new List<byte>();
+
+            foreach (int y in verticalRange)
+            {
+                foreach (int x in horizontalRange)
+                {
+                    int tileIndex = layer.GetTileIndex(x, y);
+                    uint tileId = mesh.GetTileIdAt(tileIndex);
+
+                    // Skip blank tiles
+                    //if (tileId == 0)
+                    //    continue;
+
+                    re.Add(tileId == 0 ? (byte)0 : (byte)1);
+                }
+            }
+
+            return re;
+        }
+
         // Enumerate all our meshes and bake them into OBJ Wavefront format
         private IEnumerable<Tuple<string, StringWriter>> EnumerateWavefrontData()
         {
