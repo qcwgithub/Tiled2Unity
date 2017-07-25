@@ -87,7 +87,7 @@ namespace Tiled2Unity
 
         private List<byte> BuildNavigationDataForLayerMesh(TmxLayer layer, TmxMesh mesh, IEnumerable<int> horizontalRange, IEnumerable<int> verticalRange)
         {
-            Logger.WriteLine("Building mesh obj file for '{0}'", mesh.UniqueMeshName);
+            Logger.WriteLine("Building navigation data for '{0}'", mesh.UniqueMeshName);
 
             List<byte> re = new List<byte>();
 
