@@ -335,7 +335,8 @@ namespace Tiled2Unity
                 foreach (TmxMesh mesh in layer.Meshes)
                 {
                     XElement xmlMesh = new XElement("Navigation",
-                        new XAttribute("navigation", mesh.UniqueMeshName));
+                        new XAttribute("navigation", mesh.UniqueMeshName),
+                        new XAttribute("level", layer.Properties.GetPropertyValueAsString("level")));
                     xmlMeshes.Add(xmlMesh);
                 }
             }
