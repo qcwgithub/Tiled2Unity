@@ -49,7 +49,7 @@ namespace Tiled2Unity
             }
         }
 
-        private IEnumerable<Tuple<string, List<byte>>> EnumerateNavigationData()
+        private IEnumerable<Tuple<string, string, List<byte>>> EnumerateNavigationData()
         {
             Logger.WriteLine("Enumerate map layers for navigation-build.");
             foreach (var layer in this.tmxMap.EnumerateTileLayers())
@@ -70,7 +70,9 @@ namespace Tiled2Unity
                 // ??这里会有多个吗
                 foreach (TmxMesh mesh in layer.Meshes)
                 {
-                    yield return Tuple.Create(mesh.UniqueMeshName, BuildNavigationDataForLayerMesh(layer, mesh, horizontalRange, verticalRange));
+                    yield return Tuple.Create(mesh.UniqueMeshName, 
+                        layer.Properties.GetPropertyValueAsString("level"), 
+                        BuildNavigationDataForLayerMesh(layer, mesh, horizontalRange, verticalRange));
                 }
             }
             Logger.WriteLine("Finished enumeration.");

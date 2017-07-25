@@ -50,10 +50,12 @@ namespace Tiled2Unity
             foreach (var tuple in EnumerateNavigationData())
             {
                 var meshName = tuple.Item1;
-                List<byte> data = tuple.Item2;
+                string level = tuple.Item2;
+                List<byte> data = tuple.Item3;
                 string path = String.Format("{0}.bytes", meshName);
                 yield return new XElement("ImportNavigation",
                                             new XAttribute("filename", path),
+                                            new XAttribute("level", level),
                                             Convert.ToBase64String(data.ToArray()));
             }
         }

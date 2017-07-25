@@ -330,16 +330,16 @@ namespace Tiled2Unity
                 }
             }
 
-            if (layer.Properties.GetPropertyValueAsString("type") == "Navigation")
-            {
-                foreach (TmxMesh mesh in layer.Meshes)
-                {
-                    XElement xmlMesh = new XElement("Navigation",
-                        new XAttribute("navigation", mesh.UniqueMeshName),
-                        new XAttribute("level", layer.Properties.GetPropertyValueAsString("level")));
-                    xmlMeshes.Add(xmlMesh);
-                }
-            }
+            //if (layer.Properties.GetPropertyValueAsString("type") == "Navigation")
+            //{
+            //    foreach (TmxMesh mesh in layer.Meshes)
+            //    {
+            //        XElement xmlMesh = new XElement("Navigation",
+            //            new XAttribute("navigation", mesh.UniqueMeshName),
+            //            new XAttribute("level", layer.Properties.GetPropertyValueAsString("level")));
+            //        xmlMeshes.Add(xmlMesh);
+            //    }
+            //}
 
             return xmlMeshes;
         }
