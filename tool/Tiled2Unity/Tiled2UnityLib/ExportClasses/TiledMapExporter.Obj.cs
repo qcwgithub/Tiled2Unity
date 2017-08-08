@@ -60,6 +60,7 @@ namespace Tiled2Unity
                 if (layer.Ignore == TmxLayer.IgnoreSettings.Visual)
                     continue;
 
+                // 类型是导航才处理
                 if (layer.Properties.GetPropertyValueAsString("type") != "Navigation")
                     continue;
 
@@ -91,18 +92,30 @@ namespace Tiled2Unity
 
             List<byte> re = new List<byte>();
 
-            foreach (int y in verticalRange)
+            // 反转一下y，让他从左下角开始，到Unity那边比较好处理
+            List<int> ys = new List<int>();
+            ys.AddRange(verticalRange);
+            ys.Reverse();
+
+            foreach (int y in ys)
             {
                 foreach (int x in horizontalRange)
                 {
                     int tileIndex = layer.GetTileIndex(x, y);
                     uint tileId = mesh.GetTileIdAt(tileIndex);
+                    if (tileId == 0)
+                    {
+                        re.Add((byte)0);
+                    }
+                    else
+                    {
+                        TmxTile tile = layer.TmxMap.GetTileFromTileId(tileId);
 
-                    // Skip blank tiles
-                    //if (tileId == 0)
-                    //    continue;
+                        if (tile.LocalId < 0 || tile.LocalId > 254)
+                            throw new Exception("tile.LocalId < 0 || tile.LocalId > 254");
 
-                    re.Add(tileId == 0 ? (byte)0 : (byte)1);
+                        re.Add((byte)(tile.LocalId + 1));
+                    }
                 }
             }
 

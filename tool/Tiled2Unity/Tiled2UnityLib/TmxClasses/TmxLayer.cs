@@ -11,6 +11,7 @@ namespace Tiled2Unity
     {
         public int Width { get; private set; }
         public int Height { get; private set; }
+        // 就是tmx里的data那些整数
         public uint[] TileIds { get; private set; }
         public List<TmxMesh> Meshes { get; private set; }
         public List<TmxLayer> CollisionLayers { get; private set; }
