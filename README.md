@@ -7,3 +7,7 @@
 See documenation on the [Tiled2Unity ReadTheDocs page](http://tiled2unity.readthedocs.io).
 
 **Tiled2Unity** is distributed with the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
+
+# ------------------------------------
++ 打开工程 tool\Tiled2Unity\Tiled2Unity.sln 编译
++ 编译好之后是要放到 MyCrossCode/Tool 中去使用的，结合 Unity 使用
