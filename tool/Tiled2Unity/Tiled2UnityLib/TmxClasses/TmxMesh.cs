@@ -7,6 +7,7 @@ using System.Text;
 namespace Tiled2Unity
 {
     // There are no mesh components to a TMX file, this is for convenience in mesh-ifying Tiled layers
+    // mesh 其实就是 tileId 数组
     public class TmxMesh
     {
         // Unity meshes have a limit on the number of vertices they can contain (65534)

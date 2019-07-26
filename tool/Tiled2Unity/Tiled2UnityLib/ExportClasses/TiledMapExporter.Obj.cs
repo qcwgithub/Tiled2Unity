@@ -52,6 +52,8 @@ namespace Tiled2Unity
         private IEnumerable<Tuple<string, string, List<byte>>> EnumerateNavigationData()
         {
             Logger.WriteLine("Enumerate map layers for navigation-build.");
+
+            // 遍历 tmx 中所有的 <layer>
             foreach (var layer in this.tmxMap.EnumerateTileLayers())
             {
                 if (layer.Visible != true)
@@ -69,6 +71,7 @@ namespace Tiled2Unity
                 var horizontalRange = (this.tmxMap.DrawOrderHorizontal == 1) ? Enumerable.Range(0, layer.Width) : Enumerable.Range(0, layer.Width).Reverse();
 
                 // ??这里会有多个吗
+                // mesh 其实就是 tileId 数组
                 foreach (TmxMesh mesh in layer.Meshes)
                 {
                     yield return Tuple.Create(mesh.UniqueMeshName, 
@@ -86,6 +89,7 @@ namespace Tiled2Unity
             //Logger.WriteLine("Finished enumeration.");
         }
 
+        // horizontalRange: 0,1,2,3,4...
         private List<byte> BuildNavigationDataForLayerMesh(TmxLayer layer, TmxMesh mesh, IEnumerable<int> horizontalRange, IEnumerable<int> verticalRange)
         {
             Logger.WriteLine("Building navigation data for '{0}'", mesh.UniqueMeshName);
@@ -93,6 +97,8 @@ namespace Tiled2Unity
             List<byte> re = new List<byte>();
 
             // 反转一下y，让他从左下角开始，到Unity那边比较好处理
+            // 本来是 0 1 2 3 ...
+            // 成 ... 3 2 1 0
             List<int> ys = new List<int>();
             ys.AddRange(verticalRange);
             ys.Reverse();
